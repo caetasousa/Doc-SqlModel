@@ -3,31 +3,25 @@ from typing import List, Optional
 from sqlmodel import Field, SQLModel, Relationship
 
 
-class HeroTeamLink(SQLModel, table=True):
-    team_id: Optional[int] = Field(
-        default=None, foreign_key="team.id", primary_key=True
-    )
-    hero_id: Optional[int] = Field(
-        default=None, foreign_key="hero.id", primary_key=True
-    )
-    is_training: bool = False
-
-    team: "Team" = Relationship(back_populates="hero_links")
-    hero: "Hero" = Relationship(back_populates="team_links")
-
-
-class Team(SQLModel, table=True):
-    id: Optional[int] = Field(default=None, primary_key=True)
-    name: str
-    headquarters: str
-
-    hero_links: List[HeroTeamLink] = Relationship(back_populates="team")
-
-
-class Hero(SQLModel, table=True):
-    id: Optional[int] = Field(default=None, primary_key=True)
+class HeroBase(SQLModel):
     name: str
     secret_name: str
     age: Optional[int] = None
 
-    team_links: List[HeroTeamLink] = Relationship(back_populates="hero")
+
+class Hero(HeroBase, table=True):
+    id: Optional[int] = Field(default=None, primary_key=True)
+
+
+class HeroCreate(HeroBase):
+    pass
+
+
+class HeroRead(HeroBase):
+    id: int
+
+
+class HeroUpdate(SQLModel):
+    name: Optional[str] = None
+    secret_name: Optional[str] = None
+    age: Optional[int] = None
