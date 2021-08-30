@@ -1,7 +1,7 @@
 from sqlmodel import Session, select, or_
 
-from models import Hero, Team, HeroTeamLink
-from db import engine, SQLModel
+from .models import Hero, Team, HeroTeamLink
+from .db import create_db_and_tables, engine
 
 
 def create_heroes():
@@ -74,14 +74,10 @@ def update_heroes():
             print("Spider-Boy team:", link.team, "is training:", link.is_training)
 
 
-def create_db_and_tables():
-    SQLModel.metadata.create_all(engine)
-
-
 def main():
     create_db_and_tables()
     #create_heroes()
-    update_heroes()
+    #update_heroes()
 
 if __name__ == "__main__":
     main()
